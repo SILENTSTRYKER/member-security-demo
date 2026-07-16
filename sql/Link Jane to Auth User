@@ -1,0 +1,5 @@
+insert into members (name, email, membership)
+values
+('John Smith', 'john@example.com', 'Gold'),
+('Jane Doe', 'jane@example.com', 'Silver'),
+('Jalen Barnes', 'jalen@example.com', 'Platinum');

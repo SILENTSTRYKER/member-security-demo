@@ -30,17 +30,27 @@ async function loadCurrentUser() {
 // Load the current user when the page opens
 loadCurrentUser();
 
-
 // Load member records
 document
     .getElementById("loadMembers")
     .addEventListener("click", async () => {
+
+        const button = document.getElementById("loadMembers");
+
+        // Show loading state
+        button.disabled = true;
+        button.innerHTML = "Loading Members...";
 
         const { data, error } = await client
             .from("members")
             .select("*");
 
         if (error) {
+
+            // Reset button if something went wrong
+            button.disabled = false;
+            button.innerHTML = "Load Members";
+
             alert(error.message);
             return;
         }
@@ -58,14 +68,14 @@ document
             membersDiv.innerHTML += `
                 <div class="card">
 
-                    <h2>${member.name}</h2>
+                    <h2>👤 ${member.name}</h2>
 
                     <hr>
 
-                    <p><strong>Membership</strong></p>
+                    <p><strong>⭐ Membership</strong></p>
                     <p>${member.membership}</p>
 
-                    <p><strong>Email</strong></p>
+                    <p><strong>✉ Email</strong></p>
                     <p>${member.email}</p>
 
                 </div>
@@ -73,8 +83,11 @@ document
 
         });
 
-    });
+        // Restore button
+        button.disabled = false;
+        button.innerHTML = "Load Members";
 
+    });
 
 // Logout button
 document
