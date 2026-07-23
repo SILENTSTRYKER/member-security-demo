@@ -1,38 +1,130 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Member Portal</title>
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Nexark Security Portal</title>
+
     <link rel="stylesheet" href="styles.css">
 </head>
-<body>
 
-<h1>Member Portal</h1>
+<body class="loginPage">
 
-<input
-    type="email"
-    id="email"
-    placeholder="Email">
+    <main class="loginLayout">
 
-<br><br>
+        <section class="loginBrand">
 
-<input
-    type="password"
-    id="password"
-    placeholder="Password">
+            <p class="eyebrow">NEXARK DEMO</p>
 
-<br><br>
+            <h1>Security Validation Portal</h1>
 
-<button id="loginButton">
-    Sign In
-</button>
+            <p class="loginDescription">
+                A secure member application demonstrating authentication,
+                authorization, PostgreSQL Row Level Security, and
+                least-privilege data access.
+            </p>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+            <div class="loginFeatures">
 
-<script src="config.js"></script>
+                <div class="loginFeature">
+                    <span class="featureDot"></span>
+                    Supabase Authentication
+                </div>
 
-<script src="app.js"></script>
+                <div class="loginFeature">
+                    <span class="featureDot"></span>
+                    PostgreSQL Row Level Security
+                </div>
+
+                <div class="loginFeature">
+                    <span class="featureDot"></span>
+                    Protected Member Records
+                </div>
+
+            </div>
+
+        </section>
+
+        <section class="loginCard">
+
+            <div class="loginCardHeader">
+
+                <p class="loginLabel">SECURE ACCESS</p>
+
+                <h2>Sign in to continue</h2>
+
+                <p>
+                    Enter your authorized demo account credentials.
+                </p>
+
+            </div>
+
+            <form id="loginForm">
+
+                <div class="formGroup">
+
+                    <label for="email">Email address</label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="jane@example.com"
+                        autocomplete="email"
+                        required
+                    >
+
+                </div>
+
+                <div class="formGroup">
+
+                    <label for="password">Password</label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Enter your password"
+                        autocomplete="current-password"
+                        required
+                    >
+
+                </div>
+
+                <p
+                    id="loginMessage"
+                    class="loginMessage"
+                    aria-live="polite"
+                ></p>
+
+                <button
+                    id="loginButton"
+                    type="submit"
+                    class="fullWidthButton"
+                >
+                    Sign In
+                </button>
+
+            </form>
+
+            <p class="loginFooterText">
+                Access is restricted to authorized demo users.
+            </p>
+
+        </section>
+
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="config.js"></script>
+    <script src="app.js"></script>
 
 </body>
+
 </html>
