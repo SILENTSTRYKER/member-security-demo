@@ -33,17 +33,29 @@
             <div class="loginFeatures">
 
                 <div class="loginFeature">
-                    <span class="featureDot"></span>
+                    <span
+                        class="featureDot"
+                        aria-hidden="true"
+                    ></span>
+
                     Supabase Authentication
                 </div>
 
                 <div class="loginFeature">
-                    <span class="featureDot"></span>
+                    <span
+                        class="featureDot"
+                        aria-hidden="true"
+                    ></span>
+
                     PostgreSQL Row Level Security
                 </div>
 
                 <div class="loginFeature">
-                    <span class="featureDot"></span>
+                    <span
+                        class="featureDot"
+                        aria-hidden="true"
+                    ></span>
+
                     Protected Member Records
                 </div>
 
@@ -69,7 +81,9 @@
 
                 <div class="formGroup">
 
-                    <label for="email">Email address</label>
+                    <label for="email">
+                        Email address
+                    </label>
 
                     <input
                         type="email"
@@ -77,6 +91,10 @@
                         name="email"
                         placeholder="jane@example.com"
                         autocomplete="email"
+                        autocapitalize="none"
+                        spellcheck="false"
+                        inputmode="email"
+                        maxlength="254"
                         required
                     >
 
@@ -84,7 +102,9 @@
 
                 <div class="formGroup">
 
-                    <label for="password">Password</label>
+                    <label for="password">
+                        Password
+                    </label>
 
                     <input
                         type="password"
@@ -121,7 +141,12 @@
 
     </main>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script
+        src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.5/dist/umd/supabase.js"
+        integrity="sha384-fTq5g8tD1IgcQKSKKNu5HdZncuhKN6e5MmGdzPNCK4jk3lh0tfnPZAtrUvyvgt4i"
+        crossorigin="anonymous"
+    ></script>
+
     <script src="config.js"></script>
     <script src="app.js"></script>
 

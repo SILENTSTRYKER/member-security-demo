@@ -11,75 +11,99 @@ const client = window.supabase.createClient(
 const loginForm = document.getElementById("loginForm");
 const loginButton = document.getElementById("loginButton");
 const loginMessage = document.getElementById("loginMessage");
-
-// =========================================
-// Show Login Message
-// =========================================
+const emailInput = document.getElementById("email");
+const passwordInput = document.getElementById("password");
 
 function showLoginMessage(message, type = "") {
     loginMessage.textContent = message;
     loginMessage.className = `loginMessage ${type}`;
 }
 
-// =========================================
-// Redirect Existing Session
-// =========================================
+function setLoginButtonLoading(isLoading) {
+    loginButton.disabled = isLoading;
+    loginButton.replaceChildren();
 
-async function checkExistingSession() {
-    const {
-        data: { session }
-    } = await client.auth.getSession();
+    if (isLoading) {
+        const spinner = document.createElement("span");
 
-    if (session) {
-        window.location.href = "index.html";
+        spinner.className = "spinner";
+        spinner.setAttribute("aria-hidden", "true");
+
+        loginButton.append(
+            spinner,
+            document.createTextNode("Authenticating")
+        );
+
+        loginButton.setAttribute("aria-busy", "true");
+        return;
+    }
+
+    loginButton.removeAttribute("aria-busy");
+    loginButton.textContent = "Sign In";
+}
+
+async function checkExistingUser() {
+    try {
+        const {
+            data: { user },
+            error
+        } = await client.auth.getUser();
+
+        if (!error && user) {
+            window.location.replace("index.html");
+        }
+    } catch {
+        // Keep the login page available if validation
+        // temporarily fails.
     }
 }
 
-checkExistingSession();
-
-// =========================================
-// Login
-// =========================================
+checkExistingUser();
 
 loginForm.addEventListener("submit", async event => {
     event.preventDefault();
 
-    const email = document
-        .getElementById("email")
-        .value
-        .trim();
-
-    const password = document
-        .getElementById("password")
-        .value;
+    const email = emailInput.value.trim();
+    const password = passwordInput.value;
 
     showLoginMessage("");
+    setLoginButtonLoading(true);
 
-    loginButton.disabled = true;
-    loginButton.innerHTML =
-        `<span class="spinner"></span>Authenticating`;
+    let redirecting = false;
 
-    const { error } = await client.auth.signInWithPassword({
-        email,
-        password
-    });
+    try {
+        const { error } =
+            await client.auth.signInWithPassword({
+                email,
+                password
+            });
 
-    if (error) {
+        if (error) {
+            showLoginMessage(
+                "Sign-in failed. Check your email and password.",
+                "errorMessage"
+            );
+
+            return;
+        }
+
+        passwordInput.value = "";
+
         showLoginMessage(
-            "Sign-in failed. Check your email and password.",
-            "errorMessage"
+            "Authentication successful. Redirecting...",
+            "successMessage"
         );
 
-        loginButton.disabled = false;
-        loginButton.textContent = "Sign In";
-
-        return;
+        redirecting = true;
+        window.location.replace("index.html");
+    } catch {
+        showLoginMessage(
+            "Sign-in is temporarily unavailable. Please try again.",
+            "errorMessage"
+        );
+    } finally {
+        if (!redirecting) {
+            setLoginButtonLoading(false);
+        }
     }
-
-    showLoginMessage(
-        "Authentication successful. Redirecting...",
-        "successMessage"
-    );
-
-    window.location.href = "index.html";
 });
