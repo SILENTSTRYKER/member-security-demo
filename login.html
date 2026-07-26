@@ -56,7 +56,7 @@
                         aria-hidden="true"
                     ></span>
 
-                    Protected Member Records
+                    Bot and Abuse Protection
                 </div>
 
             </div>
@@ -117,6 +117,14 @@
 
                 </div>
 
+                <div
+                    class="cf-turnstile"
+                    data-sitekey="0x4AAAAAAD-bB0MyJzzZ4KaQ"
+                    data-theme="dark"
+                    data-size="flexible"
+                    data-action="login"
+                ></div>
+
                 <p
                     id="loginMessage"
                     class="loginMessage"
@@ -140,6 +148,12 @@
         </section>
 
     </main>
+
+    <script
+        src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+        async
+        defer
+    ></script>
 
     <script
         src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.5/dist/umd/supabase.js"

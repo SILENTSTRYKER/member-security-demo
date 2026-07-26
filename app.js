@@ -42,6 +42,26 @@ function setLoginButtonLoading(isLoading) {
     loginButton.textContent = "Sign In";
 }
 
+function getCaptchaToken() {
+    if (
+        !window.turnstile ||
+        typeof window.turnstile.getResponse !== "function"
+    ) {
+        return "";
+    }
+
+    return window.turnstile.getResponse();
+}
+
+function resetCaptcha() {
+    if (
+        window.turnstile &&
+        typeof window.turnstile.reset === "function"
+    ) {
+        window.turnstile.reset();
+    }
+}
+
 async function checkExistingUser() {
     try {
         const {
@@ -53,8 +73,7 @@ async function checkExistingUser() {
             window.location.replace("index.html");
         }
     } catch {
-        // Keep the login page available if validation
-        // temporarily fails.
+        // Keep login available if validation temporarily fails.
     }
 }
 
@@ -65,8 +84,19 @@ loginForm.addEventListener("submit", async event => {
 
     const email = emailInput.value.trim();
     const password = passwordInput.value;
+    const captchaToken = getCaptchaToken();
 
     showLoginMessage("");
+
+    if (!captchaToken) {
+        showLoginMessage(
+            "Complete the security verification before signing in.",
+            "errorMessage"
+        );
+
+        return;
+    }
+
     setLoginButtonLoading(true);
 
     let redirecting = false;
@@ -75,15 +105,19 @@ loginForm.addEventListener("submit", async event => {
         const { error } =
             await client.auth.signInWithPassword({
                 email,
-                password
+                password,
+                options: {
+                    captchaToken
+                }
             });
 
         if (error) {
             showLoginMessage(
-                "Sign-in failed. Check your email and password.",
+                "Sign-in failed. Check your credentials and complete the security verification again.",
                 "errorMessage"
             );
 
+            resetCaptcha();
             return;
         }
 
@@ -101,6 +135,8 @@ loginForm.addEventListener("submit", async event => {
             "Sign-in is temporarily unavailable. Please try again.",
             "errorMessage"
         );
+
+        resetCaptcha();
     } finally {
         if (!redirecting) {
             setLoginButtonLoading(false);
