@@ -47,6 +47,8 @@ The project also includes an interactive security dashboard that validates autho
 - Client-side security activity timeline
 - Responsive security dashboard
 - Environment-variable protection for demo credentials
+- Trusted, append-only database audit logging for member changes
+- Incident-response and evidence-handling runbook
 - Proof-of-concept security assessment script
 - GitHub version control
 - Netlify deployment
@@ -74,6 +76,12 @@ The project also includes an interactive security dashboard that validates autho
 - Least-privilege access
 - Row ownership validation
 - Environment variables
+- Private database audit trail
+
+## Incident Response
+
+Operational response, evidence collection, containment, and recovery procedures
+are documented in [docs/incident-response.md](docs/incident-response.md).
 
 ## Deployment and Development
 
