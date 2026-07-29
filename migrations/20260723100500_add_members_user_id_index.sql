@@ -1,18 +1,4 @@
--- Allow authenticated users to update only records they already own.
--- WITH CHECK prevents changing the row's owner to another user.
+-- Improve performance for ownership checks used by RLS policies.
 
-drop policy if exists
-"Users can update their own member record"
-on public.members;
-
-create policy
-"Users can update their own member record"
-on public.members
-for update
-to authenticated
-using (
-    (select auth.uid()) = user_id
-)
-with check (
-    (select auth.uid()) = user_id
-);
+create index if not exists members_user_id_idx
+on public.members (user_id);
