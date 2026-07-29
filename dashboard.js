@@ -161,72 +161,91 @@ function addAuditEvent(message) {
 // =========================================
 
 async function loadCurrentUser() {
-    try {
-        const {
-            data: { user },
-            error
-        } = await client.auth.getUser();
+    const {
+        data: { user },
+        error
+    } = await client.auth.getUser();
 
-        if (error || !user) {
-            redirectToLogin();
-            return;
-        }
-
-        currentUser = user;
-
-        currentUserDiv.innerHTML = `
-            <div class="sessionGrid">
-                <div class="sessionItem">
-                    <span class="sessionLabel">
-                        User
-                    </span>
-
-                    <span class="sessionValue">
-                        ${escapeHtml(user.email)}
-                    </span>
-                </div>
-
-                <div class="sessionItem">
-                    <span class="sessionLabel">
-                        Status
-                    </span>
-
-                    <span class="sessionValue successText">
-                        Secure Session Active
-                    </span>
-                </div>
-
-                <div class="sessionItem">
-                    <span class="sessionLabel">
-                        Session Validated
-                    </span>
-
-                    <span class="sessionValue">
-                        ${escapeHtml(formatTime())}
-                    </span>
-                </div>
-            </div>
-        `;
-
-        updateStatus(
-            "authenticationStatus",
-            "Healthy",
-            "successStatus"
-        );
-
-        updateStatus(
-            "sessionStatus",
-            "Active",
-            "successStatus"
-        );
-
-        resetButtons();
-
-        addAuditEvent("Authenticated user verified.");
-        addAuditEvent("Secure session established.");
-    } catch {
-        redirectToLogin();
+    if (error || !user) {
+        window.location.replace("login.html");
+        return;
     }
+
+    const {
+        data: assuranceData,
+        error: assuranceError
+    } = await client.auth.mfa
+        .getAuthenticatorAssuranceLevel();
+
+    if (
+        assuranceError ||
+        assuranceData?.currentLevel !== "aal2"
+    ) {
+        window.location.replace("mfa.html");
+        return;
+    }
+
+    currentUser = user;
+
+    document.getElementById(
+        "currentUser"
+    ).innerHTML = `
+        <div class="sessionGrid">
+
+            <div class="sessionItem">
+                <span class="sessionLabel">
+                    User
+                </span>
+
+                <span class="sessionValue">
+                    ${escapeHtml(user.email)}
+                </span>
+            </div>
+
+            <div class="sessionItem">
+                <span class="sessionLabel">
+                    Status
+                </span>
+
+                <span class="sessionValue successText">
+                    MFA-Protected Session
+                </span>
+            </div>
+
+            <div class="sessionItem">
+                <span class="sessionLabel">
+                    Session Validated
+                </span>
+
+                <span class="sessionValue">
+                    ${escapeHtml(formatTime())}
+                </span>
+            </div>
+
+        </div>
+    `;
+
+    updateStatus(
+        "authenticationStatus",
+        "Healthy",
+        "successStatus"
+    );
+
+    updateStatus(
+        "sessionStatus",
+        "AAL2 Active",
+        "successStatus"
+    );
+
+    resetButtons();
+
+    addAuditEvent(
+        "Authentication token and MFA assurance level validated."
+    );
+
+    addAuditEvent(
+        "AAL2-protected session established."
+    );
 }
 
 client.auth.onAuthStateChange((event, session) => {

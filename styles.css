@@ -983,3 +983,39 @@ footer {
 #auditLog::-webkit-scrollbar-thumb:hover {
     background: var(--purple);
 }
+
+/* =========================================
+   Multi-Factor Authentication
+========================================= */
+
+.mfaQrContainer {
+    display: flex;
+    justify-content: center;
+    margin: 1.5rem 0;
+}
+
+.mfaQrCode {
+    display: block;
+    width: min(220px, 100%);
+    height: auto;
+    padding: 0.75rem;
+    background: #ffffff;
+    border-radius: 14px;
+}
+
+.mfaSecret {
+    display: block;
+    width: 100%;
+    margin: 0.75rem 0 1.5rem;
+    padding: 0.85rem;
+    overflow-wrap: anywhere;
+    color: #d8b4fe;
+    background: rgba(168, 85, 247, 0.08);
+    border: 1px solid rgba(168, 85, 247, 0.28);
+    border-radius: 10px;
+    user-select: all;
+}
+
+#mfaSignOutButton {
+    margin-top: 0.85rem;
+}
