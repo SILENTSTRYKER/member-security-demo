@@ -49,9 +49,12 @@ jobs:
         run: |
           node --check app.js
           node --check dashboard.js
+          node --check mfa.js
           node --check exploit.js
           node --check tests/migration-chain.test.js
           node --check tests/audit-logging.test.js
+          node --check tests/mfa-enforcement.test.js
+          node --check tests/mfa-rls-policy.test.js
           node --check tests/authorization.test.js
 
       - name: Run deterministic security tests
@@ -59,3 +62,5 @@ jobs:
           npm run test:security --
           tests/migration-chain.test.js
           tests/audit-logging.test.js
+          tests/mfa-enforcement.test.js
+          tests/mfa-rls-policy.test.js
